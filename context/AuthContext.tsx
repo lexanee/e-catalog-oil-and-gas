@@ -1,7 +1,8 @@
 
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
-export type UserRole = 'admin' | 'vendor' | 'technical';
+// Refined Roles based on SKK Migas PTK-007
+export type UserRole = 'scm' | 'technical' | 'vendor';
 
 export interface User {
   id: string;
@@ -36,23 +37,32 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }, []);
 
   const login = (email: string, role: UserRole) => {
-    // Simulate API Login
-    let name = 'System Administrator';
-    let avatar = 'AD';
-    let company = 'SKK Migas - SCM';
+    let name = '';
+    let avatar = '';
+    let company = '';
+    let id = Date.now().toString();
 
-    if (role === 'vendor') {
-      name = 'Global Suppliers Ltd.';
-      avatar = 'GS';
-      company = 'Global Suppliers Ltd.';
+    // Simulate Role-Based Identity
+    if (role === 'scm') {
+        id = 'u-scm-01';
+        name = 'Sarah (Ka. Pengadaan)';
+        avatar = 'SC';
+        company = 'SKK Migas - Divisi Pengadaan';
     } else if (role === 'technical') {
-      name = 'Chief Engineer';
-      avatar = 'TE';
-      company = 'SKK Migas - Teknis';
+        id = 'u-tech-01';
+        name = 'Ir. Budi (Chief Engineer)';
+        avatar = 'TC';
+        company = 'SKK Migas - Divisi Teknis';
+    } else if (role === 'vendor') {
+        // MATCHING MOCK DATA (v-002 Global Offshore Indonesia)
+        id = 'v-002';
+        name = 'Hartono (Ops Manager)';
+        avatar = 'VN';
+        company = 'Global Offshore Indonesia';
     }
 
     const newUser: User = {
-      id: Date.now().toString(),
+      id,
       name,
       email,
       role,

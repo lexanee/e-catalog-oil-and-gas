@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Asset, Notification, Zone, AssessmentDoc } from '../types';
 import { assets as initialAssets, zones as initialZones } from '../mockData';
@@ -67,7 +68,7 @@ export const AssetProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   // --- Asset Management ---
   const addAsset = (asset: Asset) => {
     setAssets(prev => [asset, ...prev]);
-    addNotification(asset.id, 'Asset Created', `New asset ${asset.name} added to inventory.`, 'info');
+    addNotification(asset.id, 'Aset Baru', `Aset ${asset.name} berhasil didaftarkan ke inventaris.`, 'info');
   };
 
   const updateAsset = (id: string, updates: Partial<Asset>) => {
@@ -77,13 +78,13 @@ export const AssetProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const deleteAsset = (id: string) => {
     const asset = assets.find(a => a.id === id);
     setAssets(prev => prev.filter(a => a.id !== id));
-    if (asset) addNotification(id, 'Asset Deleted', `${asset.name} has been removed from inventory.`, 'warning');
+    if (asset) addNotification(id, 'Aset Dihapus', `${asset.name} telah dihapus dari sistem.`, 'warning');
   };
 
   // --- Assessment Logic ---
   const saveFinalAssessment = (doc: AssessmentDoc) => {
     setSavedAssessments(prev => [doc, ...prev]);
-    addNotification(doc.id, 'Berita Acara Saved', `Market Assessment ${doc.id} finalized and archived.`, 'info');
+    addNotification(doc.id, 'Berita Acara Disimpan', `Asesmen Pasar ${doc.id} telah difinalisasi dan diarsipkan.`, 'info');
   };
 
   // --- Simulation Logic ---
@@ -97,11 +98,11 @@ export const AssetProvider: React.FC<{ children: ReactNode }> = ({ children }) =
           }
           return a;
        }));
-       addNotification('1', 'CRITICAL ALERT', 'Land Rig A: Engine Failure detected. Safety systems engaged.', 'critical');
+       addNotification('1', 'PERINGATAN KRITIS', 'Rig Darat A: Kegagalan Mesin Utama terdeteksi. Protokol darurat aktif.', 'critical');
     }
     
     if (type === 'weather_natuna') {
-       addNotification('SYS', 'WEATHER WARNING', 'Natuna Sea: Cyclone alert. All offshore operations suspended.', 'warning');
+       addNotification('SYS', 'PERINGATAN CUACA', 'Laut Natuna: Peringatan Siklon Tropis. Seluruh operasi lepas pantai ditangguhkan.', 'warning');
        setAssets(prev => prev.map(a => {
           if (a.location.includes('Natuna') || a.location.includes('North')) {
              return { ...a, status: 'Inactive' };
@@ -111,7 +112,7 @@ export const AssetProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
 
     if (type === 'cyber_attack') {
-       addNotification('SYS', 'SECURITY BREACH', 'Unusual traffic detected on Logistics Gateway. Lockdown initiated.', 'critical');
+       addNotification('SYS', 'PELANGGARAN KEAMANAN', 'Trafik tidak wajar terdeteksi pada Gateway Logistik. Penguncian sistem (Lockdown) dimulai.', 'critical');
     }
   };
 
@@ -140,7 +141,7 @@ export const AssetProvider: React.FC<{ children: ReactNode }> = ({ children }) =
            if (getDistanceFromLatLonInMeters(newLat, newLng, zone.coordinates.lat, zone.coordinates.lng) <= zone.radius) {
               detectedZoneId = zone.id;
               if (asset.currentZoneId !== zone.id) {
-                 addNotification(asset.id, 'Geofence Alert', `${asset.name} entered ${zone.name}`, 'info');
+                 addNotification(asset.id, 'Peringatan Geofence', `${asset.name} memasuki area ${zone.name}`, 'info');
               }
            }
         });

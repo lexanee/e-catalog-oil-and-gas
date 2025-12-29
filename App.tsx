@@ -1,47 +1,47 @@
-import React, { useState } from 'react';
+
+import React from 'react';
 import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AssetProvider } from './context/AssetContext';
 import { ProcurementProvider } from './context/ProcurementContext';
 import { LogisticsProvider } from './context/LogisticsContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
-import ProtectedRoute from './components/ProtectedRoute';
-import Navbar from './components/Navbar';
-import Sidebar from './components/Sidebar';
-import Overview from './pages/Overview';
-import Products from './pages/Products';
-import ProductDetail from './pages/ProductDetail';
-import RequestQuotation from './pages/RequestQuotation';
-import RequestList from './pages/RequestList';
-import TenderList from './pages/TenderList';
-import ContractTracking from './pages/ContractTracking';
-import LogisticsHub from './pages/LogisticsHub';
-import VendorManagement from './pages/VendorManagement';
-import LiveMap from './pages/LiveMap';
-import CompareAssets from './pages/CompareAssets';
-import VendorPortal from './pages/VendorPortal';
-import Settings from './pages/Settings';
-import Login from './pages/Login';
-import SmartAssist from './components/SmartAssist';
-import MarketAssessment from './pages/MarketAssessment';
 
-const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-   
-   return (
-      <div className="flex h-screen bg-slate-50 dark:bg-slate-950 transition-colors">
-         <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
-         <div className="flex-1 flex flex-col overflow-hidden relative">
-            <Navbar toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
-            <main className="flex-1 overflow-x-hidden overflow-y-auto bg-slate-50 dark:bg-slate-950">
-               {children}
-            </main>
-            {/* Global AI Assistant - Floating Button */}
-            <SmartAssist />
-         </div>
-      </div>
-   );
-};
+// Core Components
+import ProtectedRoute from './components/common/ProtectedRoute';
+import Layout from './components/layout/Layout';
+
+// Feature: Dashboard
+import Overview from './features/dashboard/pages/Overview';
+
+// Feature: Auth
+import Login from './features/auth/pages/Login';
+
+// Feature: Core
+import NotFound from './features/core/pages/NotFound';
+
+// Feature: Settings
+import Settings from './features/settings/pages/Settings';
+
+// Feature: Assets
+import AssetRegistry from './features/assets/pages/AssetRegistry';
+import AssetDetail from './features/assets/pages/AssetDetail';
+import OperationsMap from './features/assets/pages/OperationsMap';
+import CompareAssets from './features/assets/pages/CompareAssets';
+
+// Feature: Procurement
+import CreateEnquiry from './features/procurement/pages/CreateEnquiry';
+import EnquiryList from './features/procurement/pages/EnquiryList';
+import TenderManagement from './features/procurement/pages/TenderManagement';
+import ContractTracking from './features/procurement/pages/ContractTracking';
+import MarketAssessment from './features/procurement/pages/MarketAssessment';
+
+// Feature: Logistics
+import ShorebaseHub from './features/logistics/pages/ShorebaseHub';
+
+// Feature: Vendor
+import VendorList from './features/vendor/pages/VendorList';
+import VendorDashboard from './features/vendor/pages/VendorDashboard';
 
 const App: React.FC = () => {
   return (
@@ -54,84 +54,97 @@ const App: React.FC = () => {
                 <Routes>
                   <Route path="/login" element={<Login />} />
                   
-                  {/* Admin Routes */}
+                  {/* --- SCM & TECHNICAL (Shared Dashboard) --- */}
                   <Route path="/" element={
-                    <ProtectedRoute allowedRoles={['admin']}>
+                    <ProtectedRoute allowedRoles={['scm', 'technical']}>
                       <Layout><Overview /></Layout>
                     </ProtectedRoute>
                   } />
-                  <Route path="/products" element={
-                    <ProtectedRoute allowedRoles={['admin']}>
-                      <Layout><Products /></Layout>
+                  
+                  {/* --- TECHNICAL ONLY (Strict Master Data) --- */}
+                  <Route path="/master-data" element={
+                    <ProtectedRoute allowedRoles={['technical']}>
+                      <Layout><AssetRegistry /></Layout>
                     </ProtectedRoute>
                   } />
+
+                  {/* --- SCM & VENDOR (Asset Catalog) --- */}
+                  <Route path="/asset-catalog" element={
+                    <ProtectedRoute allowedRoles={['scm', 'vendor']}>
+                      <Layout><AssetRegistry /></Layout>
+                    </ProtectedRoute>
+                  } />
+
+                  {/* --- SHARED ASSET DETAILS --- */}
                   <Route path="/product/:id" element={
-                    <ProtectedRoute allowedRoles={['admin', 'vendor']}>
-                      <Layout><ProductDetail /></Layout>
+                    <ProtectedRoute allowedRoles={['scm', 'technical', 'vendor']}>
+                      <Layout><AssetDetail /></Layout>
                     </ProtectedRoute>
                   } />
+                  <Route path="/live-map" element={
+                    <ProtectedRoute allowedRoles={['scm', 'technical']}>
+                      <Layout><OperationsMap /></Layout>
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/compare" element={
+                    <ProtectedRoute allowedRoles={['scm', 'technical']}>
+                      <Layout><CompareAssets /></Layout>
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/request-list" element={
+                    <ProtectedRoute allowedRoles={['scm', 'technical']}>
+                      <Layout><EnquiryList /></Layout>
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/logistics" element={
+                    <ProtectedRoute allowedRoles={['scm', 'technical']}>
+                      <Layout><ShorebaseHub /></Layout>
+                    </ProtectedRoute>
+                  } />
+
+                  {/* --- SCM ONLY (Commercial) --- */}
                   <Route path="/market-assessment" element={
-                    <ProtectedRoute allowedRoles={['admin']}>
+                    <ProtectedRoute allowedRoles={['scm']}>
                       <Layout><MarketAssessment /></Layout>
                     </ProtectedRoute>
                   } />
                   <Route path="/request/:id" element={
-                    <ProtectedRoute allowedRoles={['admin']}>
-                      <Layout><RequestQuotation /></Layout>
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/request-list" element={
-                    <ProtectedRoute allowedRoles={['admin', 'technical']}>
-                      <Layout><RequestList /></Layout>
+                    <ProtectedRoute allowedRoles={['scm']}>
+                      <Layout><CreateEnquiry /></Layout>
                     </ProtectedRoute>
                   } />
                   <Route path="/tenders" element={
-                    <ProtectedRoute allowedRoles={['admin']}>
-                      <Layout><TenderList /></Layout>
+                    <ProtectedRoute allowedRoles={['scm']}>
+                      <Layout><TenderManagement /></Layout>
                     </ProtectedRoute>
                   } />
                   <Route path="/contracts" element={
-                    <ProtectedRoute allowedRoles={['admin']}>
+                    <ProtectedRoute allowedRoles={['scm']}>
                       <Layout><ContractTracking /></Layout>
                     </ProtectedRoute>
                   } />
-                  <Route path="/logistics" element={
-                    <ProtectedRoute allowedRoles={['admin']}>
-                      <Layout><LogisticsHub /></Layout>
-                    </ProtectedRoute>
-                  } />
                   <Route path="/vendors" element={
-                    <ProtectedRoute allowedRoles={['admin']}>
-                      <Layout><VendorManagement /></Layout>
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/live-map" element={
-                    <ProtectedRoute allowedRoles={['admin']}>
-                      <Layout><LiveMap /></Layout>
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/compare" element={
-                    <ProtectedRoute allowedRoles={['admin']}>
-                      <Layout><CompareAssets /></Layout>
-                    </ProtectedRoute>
-                  } />
-                  
-                  {/* Vendor Routes */}
-                  <Route path="/vendor" element={
-                    <ProtectedRoute allowedRoles={['vendor']}>
-                      <Layout><VendorPortal /></Layout>
+                    <ProtectedRoute allowedRoles={['scm']}>
+                      <Layout><VendorList /></Layout>
                     </ProtectedRoute>
                   } />
 
-                  {/* Shared */}
+                  {/* --- VENDOR PORTAL --- */}
+                  <Route path="/vendor" element={
+                    <ProtectedRoute allowedRoles={['vendor']}>
+                      <Layout><VendorDashboard /></Layout>
+                    </ProtectedRoute>
+                  } />
+
+                  {/* --- SHARED SETTINGS --- */}
                   <Route path="/settings" element={
-                    <ProtectedRoute allowedRoles={['admin', 'vendor', 'technical']}>
+                    <ProtectedRoute allowedRoles={['scm', 'vendor', 'technical']}>
                       <Layout><Settings /></Layout>
                     </ProtectedRoute>
                   } />
                   
                   {/* Fallback */}
-                  <Route path="*" element={<Navigate to="/" replace />} />
+                  <Route path="*" element={<NotFound />} />
                 </Routes>
               </Router>
             </LogisticsProvider>

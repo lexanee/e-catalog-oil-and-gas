@@ -51,7 +51,7 @@ export const validateAssetReadiness = (asset: Asset): void => {
       break;
     case 'Kapal':
       if (!asset.capacity.includes('Bollard') && !asset.capacity.includes('DWT')) {
-        throw new Error("Vessel must have Bollard Pull or DWT defined.");
+        throw new Error("Kapal wajib memiliki data Bollard Pull atau DWT.");
       }
       break;
   }

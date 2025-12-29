@@ -10,7 +10,7 @@ export const vendors: Vendor[] = [
   {
     id: 'v-001',
     name: 'PT. Samudra Merah Putih',
-    type: 'Integrated Drilling Services',
+    type: 'Jasa Pengeboran Terintegrasi',
     status: 'Verified',
     civdExpiry: `${nextYear}-05-20`,
     csmsScore: 95,
@@ -22,7 +22,7 @@ export const vendors: Vendor[] = [
   {
     id: 'v-002',
     name: 'Global Offshore Indonesia',
-    type: 'Marine Logistics',
+    type: 'Logistik Kelautan (Marine)',
     status: 'Verified',
     civdExpiry: `${currentYear}-12-15`,
     csmsScore: 88,
@@ -34,7 +34,7 @@ export const vendors: Vendor[] = [
   {
     id: 'v-003',
     name: 'Deepsea Drilling Intl',
-    type: 'Offshore Drilling',
+    type: 'Pengeboran Lepas Pantai',
     status: 'Verified',
     civdExpiry: `${currentYear}-08-01`,
     csmsScore: 75,
@@ -48,35 +48,35 @@ export const vendors: Vendor[] = [
 export const shorebases: Shorebase[] = [
   {
     id: 'sb1',
-    name: 'Matak Supply Base',
+    name: 'Pangkalan Matak (Anambas)',
     location: 'Kepulauan Anambas',
     coordinates: { lat: 3.5400, lng: 106.2600 },
     capabilities: ['Fuel Bunkering', 'Open Yard', 'Helipad', 'Waste Management'],
     currentStock: [
-      { item: 'Marine Gas Oil (MGO)', qty: 500000, unit: 'Liters' },
-      { item: 'Drill Pipe 5 inch', qty: 450, unit: 'Joints' },
-      { item: 'Barite', qty: 2000, unit: 'Sacks' }
+      { item: 'Minyak Solar (MGO)', qty: 500000, unit: 'Liter' },
+      { item: 'Pipa Bor 5 inch', qty: 450, unit: 'Joint' },
+      { item: 'Barite (Lumpur)', qty: 2000, unit: 'Sak' }
     ]
   },
   {
     id: 'sb2',
     name: 'Lamongan Shorebase',
-    location: 'East Java',
+    location: 'Jawa Timur',
     coordinates: { lat: -6.8900, lng: 112.3000 },
     capabilities: ['Heavy Lift Crane', 'Warehouse'],
     currentStock: [
-      { item: 'Tubulars', qty: 5000, unit: 'MT' },
-      { item: 'Cementing Units', qty: 4, unit: 'Units' }
+      { item: 'Pipa Tubular', qty: 5000, unit: 'MT' },
+      { item: 'Unit Semen (Cementing)', qty: 4, unit: 'Unit' }
     ]
   },
   {
     id: 'sb3',
-    name: 'Sorong Logistics Hub',
+    name: 'Hub Logistik Sorong',
     location: 'Papua Barat',
     coordinates: { lat: -0.8700, lng: 131.2500 },
     capabilities: ['Deep Water Jetty', 'Drilling Mud Plant'],
     currentStock: [
-      { item: 'Liquid Mud', qty: 12000, unit: 'BBL' },
+      { item: 'Lumpur Cair (Liquid Mud)', qty: 12000, unit: 'BBL' },
       { item: 'Base Oil', qty: 2500, unit: 'BBL' }
     ]
   }
@@ -85,7 +85,7 @@ export const shorebases: Shorebase[] = [
 export const zones: Zone[] = [
   {
     id: 'z1',
-    name: 'Natuna Restricted Zone',
+    name: 'Zona Terbatas Natuna',
     coordinates: { lat: 4.8000, lng: 108.0000 },
     radius: 120000, 
     color: '#ef4444', 
@@ -93,7 +93,7 @@ export const zones: Zone[] = [
   },
   {
     id: 'z2',
-    name: 'Masela Operational Area',
+    name: 'Wilayah Operasi Masela',
     coordinates: { lat: -8.5000, lng: 130.5000 },
     radius: 150000,
     color: '#3b82f6',
@@ -103,7 +103,7 @@ export const zones: Zone[] = [
 
 // Maintenance Logs
 const commonLog: MaintenanceRecord[] = [
-  { id: 'm1', title: 'Annual Certification', date: `${currentYear}-01-15`, type: 'Inspection', description: 'BKI Class Annual Survey completed.' },
+  { id: 'm1', title: 'Sertifikasi Tahunan', date: `${currentYear}-01-15`, type: 'Inspection', description: 'Survei Tahunan Kelas BKI Selesai.' },
 ];
 
 export const assets: Asset[] = [
@@ -112,7 +112,7 @@ export const assets: Asset[] = [
     number: `${currentYear}/OS/001/NJ01`, 
     name: 'Nusantara Jack-up 01', 
     category: 'Offshore Rig', 
-    location: 'Natuna Sea Block B', 
+    location: 'Laut Natuna Blok B', 
     coordinates: { lat: 4.1234, lng: 108.2000 }, 
     history: [{ lat: 4.1200, lng: 108.1900 }, { lat: 4.1234, lng: 108.2000 }], 
     dailyRate: 150000000, 
@@ -138,8 +138,8 @@ export const assets: Asset[] = [
     variableDeckLoad: 6500,
     maintenanceLog: commonLog,
     inventory: [
-      { id: 'sp-1', name: 'Drill Pipe 5 inch', sku: 'DP-005', category: 'Drilling', quantity: 200, minLevel: 50, unit: 'Joints', location: 'Pipe Deck', lastUpdated: today },
-      { id: 'sp-2', name: 'Diesel Filter (Main)', sku: 'ENG-FLT-204', category: 'Engine', quantity: 15, minLevel: 8, unit: 'pcs', location: 'Engine Room', lastUpdated: today }
+      { id: 'sp-1', name: 'Pipa Bor 5 inch', sku: 'DP-005', category: 'Pengeboran', quantity: 200, minLevel: 50, unit: 'Joint', location: 'Pipe Deck', lastUpdated: today },
+      { id: 'sp-2', name: 'Filter Diesel (Utama)', sku: 'ENG-FLT-204', category: 'Mesin', quantity: 15, minLevel: 8, unit: 'Pcs', location: 'Ruang Mesin', lastUpdated: today }
     ]
   },
   { 
@@ -147,7 +147,7 @@ export const assets: Asset[] = [
     number: `${currentYear}/VS/005/MA05`, 
     name: 'Merpati AHTS-05', 
     category: 'Kapal', 
-    location: 'Masela Block (Abadi)', 
+    location: 'Blok Masela (Lapangan Abadi)', 
     coordinates: { lat: -8.5000, lng: 130.5000 }, 
     history: [], 
     dailyRate: 45000000, 
@@ -171,10 +171,10 @@ export const assets: Asset[] = [
     nextMaintenanceDate: today, 
     mtbf: 800,
     maintenanceLog: [
-      { id: 'wo-prev', title: 'Main Engine Overheat', date: today, type: 'Repair', description: 'Cooling system failure detected.' }
+      { id: 'wo-prev', title: 'Overheat Mesin Utama', date: today, type: 'Repair', description: 'Kegagalan sistem pendingin terdeteksi.' }
     ],
     inventory: [
-      { id: 'sp-3', name: 'Synthetic Oil (55 Gal)', sku: 'LUB-OIL-55G', category: 'Lubricants', quantity: 2, minLevel: 5, unit: 'drums', location: 'Store', lastUpdated: today }
+      { id: 'sp-3', name: 'Oli Sintetik (55 Gal)', sku: 'LUB-OIL-55G', category: 'Lubricants', quantity: 2, minLevel: 5, unit: 'Drum', location: 'Store', lastUpdated: today }
     ]
   },
   { 
@@ -230,8 +230,8 @@ export const requestsData: QuotationRequest[] = [
 export const tenders: Tender[] = [
   {
     id: 'TDR-2024-009',
-    name: 'Provision of 1 Unit Jack-up Rig for Exploration',
-    description: 'Procurement of High-Spec Jack-up Rig for Natuna Sea exploration drilling. 350ft Water Depth required.',
+    name: 'Penyediaan 1 Unit Rig Jack-up untuk Eksplorasi',
+    description: 'Pengadaan Rig Jack-up Spesifikasi Tinggi untuk pengeboran eksplorasi Laut Natuna. Kedalaman Air 350 kaki (Water Depth) diperlukan sesuai standar PTK-007.',
     createdDate: today,
     bidOpeningDate: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split('T')[0], // 7 Days from now
     status: 'Published',
