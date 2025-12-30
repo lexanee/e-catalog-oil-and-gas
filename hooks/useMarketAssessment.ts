@@ -1,29 +1,34 @@
-
-import { useState, useCallback } from 'react';
-import { useAssets } from '../context/AssetContext';
-import { useProcurement } from '../context/ProcurementContext';
-import { useAuth } from '../context/AuthContext';
-import { Asset, AssessmentDoc, AssessmentFilter } from '../types';
+import { useState, useCallback } from "react";
+import { useAssets } from "../context/AssetContext";
+import { useProcurement } from "../context/ProcurementContext";
+import { useAuth } from "../context/AuthContext";
+import { Asset, AssessmentDoc, AssessmentFilter } from "../types";
 
 export const useMarketAssessment = () => {
   const { assets } = useAssets();
-  const { contracts, requests, saveAssessment: saveToContext } = useProcurement();
+  const {
+    contracts,
+    requests,
+    saveAssessment: saveToContext,
+  } = useProcurement();
   const { user } = useAuth();
 
   const [assessment, setAssessment] = useState<AssessmentDoc>({
-    id: 'NEW',
-    createdBy: user?.name || 'Unknown User',
+    id: "NEW",
+    createdBy: user?.name || "Unknown User",
     createdAt: new Date().toISOString(),
     title: `Market Assessment - ${new Date().toLocaleDateString()}`,
-    status: 'Konsep',
+    status: "Konsep",
     filters: {
-      category: 'Onshore Rig',
-      startDate: new Date().toISOString().split('T')[0],
-      endDate: new Date(new Date().setDate(new Date().getDate() + 30)).toISOString().split('T')[0],
+      category: "Onshore Rig",
+      startDate: new Date().toISOString().split("T")[0],
+      endDate: new Date(new Date().setDate(new Date().getDate() + 30))
+        .toISOString()
+        .split("T")[0],
       minYear: 2010,
-      minCapacity: 0
+      minCapacity: 0,
     },
-    candidates: []
+    candidates: [],
   });
 
   const [isCalculated, setIsCalculated] = useState(false);
@@ -35,7 +40,12 @@ export const useMarketAssessment = () => {
   };
 
   // Helper: Check Date Overlap
-  const checkOverlap = (startA: string, endA: string, startB: string, endB: string): boolean => {
+  const checkOverlap = (
+    startA: string,
+    endA: string,
+    startB: string,
+    endB: string
+  ): boolean => {
     const sA = new Date(startA).getTime();
     const eA = new Date(endA).getTime();
     const sB = new Date(startB).getTime();
@@ -44,54 +54,70 @@ export const useMarketAssessment = () => {
   };
 
   const updateFilters = (newFilters: Partial<AssessmentFilter>) => {
-    if (assessment.status === 'Tersimpan') return; // Immutable check
-    setAssessment(prev => ({
+    if (assessment.status === "Tersimpan") return; // Immutable check
+    setAssessment((prev) => ({
       ...prev,
-      filters: { ...prev.filters, ...newFilters }
+      filters: { ...prev.filters, ...newFilters },
     }));
     setIsCalculated(false);
   };
 
   const updateTitle = (title: string) => {
-    if (assessment.status === 'Tersimpan') return;
-    setAssessment(prev => ({ ...prev, title }));
+    if (assessment.status === "Tersimpan") return;
+    setAssessment((prev) => ({ ...prev, title }));
   };
 
   const runAssessment = useCallback(() => {
-    const { category, minYear, minCapacity, startDate, endDate, region } = assessment.filters;
+    const { category, minYear, minCapacity, startDate, endDate, region } =
+      assessment.filters;
 
-    const results = assets.filter(asset => {
+    const results = assets.filter((asset) => {
       // 1. Basic Status Check
-      if (asset.status !== 'Active') return false;
+      if (asset.status !== "Active") return false;
 
       // 2. Category Check
-      if (category !== 'All' && asset.category !== category) return false;
+      if (category !== "All" && asset.category !== category) return false;
 
       // 3. Technical Parameters
       if (minYear && asset.yearBuilt < minYear) return false;
-      
-      const assetCapVal = extractCapacityValue(asset.capacityString || '');
+
+      const assetCapVal = extractCapacityValue(asset.capacityString || "");
       if (minCapacity && assetCapVal < minCapacity) return false;
 
-      if (region && !asset.location.toLowerCase().includes(region.toLowerCase())) return false;
+      if (
+        region &&
+        !asset.location.toLowerCase().includes(region.toLowerCase())
+      )
+        return false;
 
       // 4. Critical: Date Availability Check against Contracts
-      const isBookedInContract = contracts.some(contract => {
-        const hasAsset = contract.assetNames.includes(asset.name); 
-        const isLiveContract = contract.status === 'Active';
-        const overlap = checkOverlap(startDate, endDate, contract.startDate, contract.endDate);
+      const isBookedInContract = contracts.some((contract) => {
+        const hasAsset = contract.assetNames.includes(asset.name);
+        const isLiveContract = contract.status === "Active";
+        const overlap = checkOverlap(
+          startDate,
+          endDate,
+          contract.startDate,
+          contract.endDate
+        );
         return hasAsset && isLiveContract && overlap;
       });
 
       if (isBookedInContract) return false;
 
       // Check against Approved/Pending Requests
-      const isBookedInRequest = requests.some(req => {
+      const isBookedInRequest = requests.some((req) => {
         const isSameAsset = req.assetName === asset.name;
-        const isRelevantStatus = req.status === 'Approved' || req.status === 'Pending';
+        const isRelevantStatus =
+          req.status === "Approved" || req.status === "Pending";
         if (!req.dateFrom || !req.dateTo) return false;
-        
-        const overlap = checkOverlap(startDate, endDate, req.dateFrom, req.dateTo);
+
+        const overlap = checkOverlap(
+          startDate,
+          endDate,
+          req.dateFrom,
+          req.dateTo
+        );
         return isSameAsset && isRelevantStatus && overlap;
       });
 
@@ -100,41 +126,44 @@ export const useMarketAssessment = () => {
       return true;
     });
 
-    setAssessment(prev => ({
+    setAssessment((prev) => ({
       ...prev,
-      candidates: results
+      candidates: results,
     }));
     setIsCalculated(true);
   }, [assessment.filters, assets, contracts, requests]);
 
-  const saveAssessment = (status: 'DRAFT' | 'FINAL') => {
+  const saveAssessment = (status: "DRAFT" | "FINAL") => {
     if (assessment.candidates.length === 0 && !isCalculated) {
-        alert("Please calculate candidates before saving.");
-        return;
+      throw new Error(
+        "Harap lakukan kalkulasi kandidat terlebih dahulu sebelum menyimpan."
+      );
     }
-    
+
     // Use ProcurementContext to handle saving and ID generation
     const savedDoc = saveToContext(assessment, status);
-    
+
     // Update local state with the returned doc (contains new ID and Status)
     setAssessment(savedDoc);
   };
 
   const resetAssessment = () => {
     setAssessment({
-      id: 'NEW',
-      createdBy: user?.name || 'Unknown User',
+      id: "NEW",
+      createdBy: user?.name || "Unknown User",
       createdAt: new Date().toISOString(),
       title: `Market Assessment - ${new Date().toLocaleDateString()}`,
-      status: 'Konsep',
+      status: "Konsep",
       filters: {
-        category: 'Onshore Rig',
-        startDate: new Date().toISOString().split('T')[0],
-        endDate: new Date(new Date().setDate(new Date().getDate() + 30)).toISOString().split('T')[0],
+        category: "Onshore Rig",
+        startDate: new Date().toISOString().split("T")[0],
+        endDate: new Date(new Date().setDate(new Date().getDate() + 30))
+          .toISOString()
+          .split("T")[0],
         minYear: 2010,
-        minCapacity: 0
+        minCapacity: 0,
       },
-      candidates: []
+      candidates: [],
     });
     setIsCalculated(false);
   };
@@ -146,6 +175,6 @@ export const useMarketAssessment = () => {
     runAssessment,
     saveAssessment,
     resetAssessment,
-    isCalculated
+    isCalculated,
   };
 };
