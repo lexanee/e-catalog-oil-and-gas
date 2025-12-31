@@ -1,0 +1,252 @@
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+/* Custom theme for MIGAS e-Catalog */
+@theme {
+  /* MIGAS Brand Colors */
+  --color-skk-green: #84cc16;
+  --color-skk-red: #ef4444;
+  --color-skk-dark: #1e293b;
+
+  /* Custom animations */
+  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-pulse-red: pulse-red 2s infinite;
+
+  @keyframes pulse-red {
+    0% {
+      box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    }
+    70% {
+      box-shadow: 0 0 0 20px rgba(239, 68, 68, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    }
+  }
+
+  /* War Room Animations */
+  @keyframes radar-sweep {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes scan-line {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(100vh);
+    }
+  }
+
+  @keyframes hud-flicker {
+    0% {
+      opacity: 0.9;
+    }
+    5% {
+      opacity: 0.5;
+    }
+    10% {
+      opacity: 0.9;
+    }
+    100% {
+      opacity: 0.9;
+      /* Global Smooth Theme Transition */
+      *,
+      *::before,
+      *::after {
+        transition-property: background-color, border-color, color, fill, stroke,
+          shadow;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 300ms;
+      }
+    }
+  }
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Modern Minimalist Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Animation Primitives */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes spin {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.animate-slide-in {
+  animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.animate-spin-slow {
+  animation: spin 8s linear infinite;
+}
+
+/* Leaflet Modern Overrides */
+.leaflet-container {
+  font-family: "Inter", sans-serif;
+  background: #f8fafc;
+  z-index: 0;
+}
+.dark .leaflet-container {
+  background: #020617;
+}
+
+.leaflet-popup-content-wrapper {
+  background: white;
+  color: #1e293b;
+  border-radius: 0.75rem; /* rounded-xl */
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  padding: 0;
+}
+.dark .leaflet-popup-content-wrapper {
+  background: #0f172a;
+  color: #f8fafc;
+  border-color: #1e293b;
+}
+.leaflet-popup-content {
+  margin: 0;
+  line-height: 1.4;
+}
+.leaflet-popup-tip {
+  background: white;
+  border-left: 1px solid #e2e8f0;
+  border-top: 1px solid #e2e8f0;
+}
+.dark .leaflet-popup-tip {
+  background: #0f172a;
+  border-color: #1e293b;
+}
+.custom-marker {
+  background: transparent;
+  border: none;
+}
+
+/* PRINT STYLES */
+@media print {
+  @page {
+    size: landscape;
+    margin: 1cm;
+  }
+  body {
+    background: white;
+    color: black;
+  }
+  nav,
+  header,
+  aside,
+  .sidebar,
+  .navbar,
+  button,
+  .no-print {
+    display: none !important;
+  }
+  .p-6 {
+    padding: 0 !important;
+  }
+  .bg-slate-50,
+  .dark .bg-slate-900 {
+    background: white !important;
+  }
+  .text-white {
+    color: black !important;
+  }
+  .border {
+    border-color: #ccc !important;
+  }
+  .shadow-sm,
+  .shadow-md,
+  .shadow-lg {
+    box-shadow: none !important;
+  }
+
+  /* Ensure table is visible */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10pt;
+  }
+  th,
+  td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+
+  /* Layout adjustments */
+  .flex {
+    display: block !important;
+  }
+  .grid {
+    display: block !important;
+  }
+  .overflow-hidden {
+    overflow: visible !important;
+  }
+  .h-screen {
+    height: auto !important;
+  }
+}

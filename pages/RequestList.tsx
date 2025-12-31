@@ -1,1 +1,0 @@
-// Moved to features/procurement/pages/EnquiryList.tsx

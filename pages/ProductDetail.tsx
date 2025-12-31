@@ -1,1 +1,0 @@
-// Moved to features/assets/pages/AssetDetail.tsx

@@ -1,1 +1,0 @@
-// Moved to features/vendor/pages/VendorList.tsx

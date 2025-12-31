@@ -1,1 +1,0 @@
-// Moved to features/assets/components/AssetMap.tsx
