@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  app:
+    container_name: e-catalog-migas
+    build: .
+    ports:
+      - "3310:80"
+    restart: unless-stopped
+    # Optional: Resource limits
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '0.50'
+    #       memory: 512M

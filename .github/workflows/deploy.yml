@@ -1,0 +1,36 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Copy files to VPS
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_KEY }}
+          source: "."
+          target: "~/app/e-catalog-migas"
+          rm: true # Clean target directory before copy
+
+      - name: Build and Deploy on VPS
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_KEY }}
+          script: |
+            cd ~/app/e-catalog-migas
+            # Build and Run with Docker Compose
+            docker-compose up -d --build
+
+            # Cleanup (Optional: prune unused images)
+            docker image prune -f
