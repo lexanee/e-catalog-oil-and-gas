@@ -53,7 +53,7 @@ const Login: React.FC = () => {
             />
           </div>
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
-            MIGAS
+            MIGAS Enterprise
           </h1>
           <p className="text-slate-500 text-sm mt-1">
             E-Catalog & Supply Chain Management
