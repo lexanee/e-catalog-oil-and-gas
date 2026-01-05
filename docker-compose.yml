@@ -5,3 +5,11 @@ services:
     ports:
       - "3310:80"
     restart: unless-stopped
+    env_file: .env
+
+    networks:
+      - private_net
+
+networks:
+  private_net:
+    external: true
