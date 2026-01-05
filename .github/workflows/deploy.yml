@@ -26,7 +26,7 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_KEY }}
-          source: "app-image.tar.gz,docker-compose.yml"
+          source: "app-image.tar.gz,docker-compose.yml,.env"
           target: "~/app/e-catalog-migas"
 
       - name: Deploy to server
@@ -40,6 +40,9 @@ jobs:
 
             echo "Loading docker image..."
             gunzip -c app-image.tar.gz | docker load
+
+            echo "Ensuring network exists..."
+            docker network create private_net 2>/dev/null || true
 
             echo "Restarting services..."
             docker compose -f docker-compose.yml up -d --force-recreate
