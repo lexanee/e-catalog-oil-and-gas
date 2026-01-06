@@ -1,9 +1,9 @@
 services:
   e-catalog-migas:
     container_name: e-catalog-migas
-    image: e-catalog-migas:latest
-    ports:
-      - "3310:80"
+    image: e-catalog-migas:1.0
+    # ports:
+    # - "3300:3300"
     restart: unless-stopped
     env_file: .env
 
